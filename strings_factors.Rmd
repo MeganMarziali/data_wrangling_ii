@@ -1,5 +1,6 @@
 ---
-title: "Reading data"
+title: "Visualization"
+subtitle: "Part 2"
 output: github_document
 ---
 
