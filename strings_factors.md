@@ -1,26 +1,66 @@
----
-title: "Strings and factors"
-output: github_document
----
+Strings and factors
+================
 
-```{r setup}
+``` r
 library(tidyverse)
+```
+
+    ## ── Attaching packages ──────────────────────────────────── tidyverse 1.3.0 ──
+
+    ## ✓ ggplot2 3.3.0     ✓ purrr   0.3.4
+    ## ✓ tibble  3.0.1     ✓ dplyr   1.0.2
+    ## ✓ tidyr   1.1.0     ✓ stringr 1.4.0
+    ## ✓ readr   1.3.1     ✓ forcats 0.5.0
+
+    ## ── Conflicts ─────────────────────────────────────── tidyverse_conflicts() ──
+    ## x dplyr::filter() masks stats::filter()
+    ## x dplyr::lag()    masks stats::lag()
+
+``` r
 library(rvest)
+```
+
+    ## Loading required package: xml2
+
+    ## 
+    ## Attaching package: 'rvest'
+
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     pluck
+
+    ## The following object is masked from 'package:readr':
+    ## 
+    ##     guess_encoding
+
+``` r
 library(httr)
 library(p8105.datasets)
 ```
 
 ## String and regex
 
-```{r}
+``` r
 string_vec = c("my", "name", "is", "jeff")
 
 str_detect(string_vec, "jeff")
+```
+
+    ## [1] FALSE FALSE FALSE  TRUE
+
+``` r
 str_replace(string_vec, "jeff", "Jeff")
+```
+
+    ## [1] "my"   "name" "is"   "Jeff"
+
+``` r
 str_replace(string_vec, "j", "Jeff")
 ```
 
-```{r}
+    ## [1] "my"      "name"    "is"      "Jeffeff"
+
+``` r
 string_vec = c(
   "i think we all rule for participating",
   "i think i have been caught",
@@ -29,11 +69,23 @@ string_vec = c(
   )
 
 str_detect(string_vec, "i think")
+```
+
+    ## [1] TRUE TRUE TRUE TRUE
+
+``` r
 str_detect(string_vec, "^i think")
+```
+
+    ## [1]  TRUE  TRUE  TRUE FALSE
+
+``` r
 str_detect(string_vec, "i think$")
 ```
 
-```{r}
+    ## [1] FALSE FALSE FALSE  TRUE
+
+``` r
 string_vec = c(
   "Y'all remember Pres. HW Bush?",
   "I saw a green bush",
@@ -42,11 +94,23 @@ string_vec = c(
   )
 
 str_detect(string_vec, "bush")
+```
+
+    ## [1] FALSE  TRUE FALSE FALSE
+
+``` r
 str_detect(string_vec, "Bush")
+```
+
+    ## [1]  TRUE FALSE  TRUE FALSE
+
+``` r
 str_detect(string_vec,"[Bb]ush")
 ```
 
-```{r}
+    ## [1]  TRUE  TRUE  TRUE FALSE
+
+``` r
 string_vec = c(
   '7th inning stretch',
   '1st half soon to begin. Texas won the toss.',
@@ -57,7 +121,9 @@ string_vec = c(
 str_detect(string_vec, "^[0-9][a-zA-Z]")
 ```
 
-```{r}
+    ## [1]  TRUE  TRUE FALSE  TRUE
+
+``` r
 string_vec = c(
   'Its 7:11 in the evening',
   'want to go to 7-11?',
@@ -66,10 +132,17 @@ string_vec = c(
   )
 
 str_detect(string_vec, "7\\.11")
+```
+
+    ## [1] FALSE FALSE FALSE  TRUE
+
+``` r
 str_detect(string_vec, "7.11")
 ```
 
-```{r}
+    ## [1]  TRUE  TRUE FALSE  TRUE
+
+``` r
 string_vec = c(
   'The CI is [2, 5]',
   ':-]',
@@ -80,27 +153,43 @@ string_vec = c(
 str_detect(string_vec, "\\[")
 ```
 
-```{r}
+    ## [1]  TRUE FALSE  TRUE  TRUE
+
+``` r
 factor_vec = factor(c("male", "male", "female", "female"))
 
 factor_vec
+```
 
+    ## [1] male   male   female female
+    ## Levels: female male
+
+``` r
 as.numeric(factor_vec)
 ```
+
+    ## [1] 2 2 1 1
 
 What happens if I relevel some of these?
 
-```{r}
+``` r
 factor_vec = fct_relevel(factor_vec, "male")
 
 factor_vec
+```
 
+    ## [1] male   male   female female
+    ## Levels: male female
+
+``` r
 as.numeric(factor_vec)
 ```
 
+    ## [1] 1 1 2 2
+
 ## NSDUH
 
-```{r}
+``` r
 nsduh_url = "http://samhda.s3-us-gov-west-1.amazonaws.com/s3fs-public/field-uploads/2k15StateFiles/NSDUHsaeShortTermCHG2015.htm"
 
 table_mj = 
@@ -112,7 +201,7 @@ table_mj =
   as_tibble()
 ```
 
-```{r}
+``` r
 data_mj = 
   table_mj %>% 
   select(-contains("P Value")) %>% 
@@ -129,4 +218,3 @@ data_mj =
   ) %>% 
   filter(!(State %in% c("Total U.S.", "Northeast", "Midwest", "South", "West")))
 ```
-
